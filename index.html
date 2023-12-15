@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CassinoPix</title>
+
+    <!--Api Vturb-->
+    <link
+      rel="preload"
+      href="https://scripts.converteai.net/92be81cf-06f2-4dc3-9145-e762e8be94b8/players/657c884ad817a2000939b75b/player.js"
+      as="script"
+    />
+    <link
+      rel="preload"
+      href="https://cdn.converteai.net/lib/js/smartplayer/v1/smartplayer.min.js"
+      as="script"
+    />
+    <link
+      rel="preload"
+      href="https://images.converteai.net/92be81cf-06f2-4dc3-9145-e762e8be94b8/players/657c884ad817a2000939b75b/thumbnail.jpg"
+      as="image"
+    />
+    <link
+      rel="preload"
+      href="https://cdn.converteai.net/92be81cf-06f2-4dc3-9145-e762e8be94b8/657c87aa61a4e8000aecb234/main.m3u8"
+      as="fetch"
+    />
+    <link rel="dns-prefetch" href="https://cdn.converteai.net" />
+    <link rel="dns-prefetch" href="https://scripts.converteai.net" />
+    <link rel="dns-prefetch" href="https://images.converteai.net" />
+    <link rel="dns-prefetch" href="https://api.vturb.com.br" />
+    <!-- GTM -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-MW997RG");
+    </script>
+    <!-- Fim GTM -->
+  </head>
+
+  <body oncontextmenu="return false">
+    <div id="root"></div>
+
+    <script type="module" src="/src/main.tsx"></script>
+    <!--Monitoramento-->
+    <script defer>
+      document.addEventListener("DOMContentLoaded", function () {
+        var SECONDS_TO_DISPLAY = 224;
+        var CLASS_TO_DISPLAY = ".esconder";
+        var attempts = 0;
+        var elsHiddenList = [];
+        var elsDisplayed = false;
+        var elsHidden = document.querySelectorAll(CLASS_TO_DISPLAY);
+        var alreadyDisplayedKey = `alreadyElsDisplayed${SECONDS_TO_DISPLAY}`;
+        var alreadyElsDisplayed = localStorage.getItem(alreadyDisplayedKey);
+
+        setTimeout(function () {
+          elsHiddenList = Array.prototype.slice.call(elsHidden);
+        }, 0);
+
+        var showHiddenElements = function () {
+          elsDisplayed = true;
+          elsHiddenList.forEach((e) => (e.style.display = "block"));
+          localStorage.setItem(alreadyDisplayedKey, true);
+        };
+
+        var startWatchVideoProgress = function () {
+          if (
+            typeof smartplayer === "undefined" ||
+            !(smartplayer.instances && smartplayer.instances.length)
+          ) {
+            if (attempts >= 10) return;
+            attempts += 1;
+            return setTimeout(function () {
+              startWatchVideoProgress();
+            }, 1000);
+          }
+
+          smartplayer.instances[0].on("timeupdate", () => {
+            if (elsDisplayed || smartplayer.instances[0].smartAutoPlay) return;
+            if (smartplayer.instances[0].video.currentTime < SECONDS_TO_DISPLAY)
+              return;
+            showHiddenElements();
+          });
+        };
+
+        if (alreadyElsDisplayed === "true") {
+          setTimeout(function () {
+            showHiddenElements();
+          }, 100);
+        } else {
+          startWatchVideoProgress();
+        }
+      }); // Fechando a função "addEventListener"
+
+      var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+          sURLVariables = sPageURL.split("&"),
+          sParameterName,
+          i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+          sParameterName = sURLVariables[i].split("=");
+
+          if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined
+              ? true
+              : decodeURIComponent(sParameterName[1]);
+          }
+        }
+        return false;
+      };
+    </script>
+
+    <!--GTM-->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-THVD22HQ"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe>
+    </noscript>
+  </body>
+</html>
