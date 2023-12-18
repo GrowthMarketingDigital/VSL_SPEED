@@ -15,7 +15,7 @@ const Header = () => {
   useEffect(() => {
     const idTimeout = setTimeout(() => {
       aleatorio(340, 410);
-    }, 3000);
+    }, 10000);
 
     return () => clearTimeout(idTimeout);
   }, [value]);
@@ -23,7 +23,7 @@ const Header = () => {
   return (
     <div className='menu'>
       <h1>
-        <span className='grifar'>Como pessoas comuns estão ganhando muito dinheiro com um dos jogos mais consistentes dos cassinos sem precisar:</span>
+        <span className='grifar'>COMO PESSOAS COMUNS ESTÃO FAZENDO MUITO DINHEIRO CONSISTENTE NOS CASSINOS SEM PRECISAR:</span>
       </h1>
     <ul>
       <li><TbCircleNumber1 className="icon" />hackear a plataforma</li>
